@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Life Counter</string>
+    <string name="life_total_label">Life Total: </string>
+</resources>
