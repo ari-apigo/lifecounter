@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Life Counter</string>
     <string name="life_total_label">Life Total: </string>
+    <string name="lose_msg">Player %1$s LOSES!</string>
 </resources>

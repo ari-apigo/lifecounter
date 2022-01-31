@@ -1,17 +1,21 @@
 package edu.us.ischool.lifecounter
 
+import android.app.Activity
 import android.content.Context
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.isInvisible
 
 // consulted https://www.raywenderlich.com/155-android-listview-tutorial-with-kotlin
 class PlayerAdapter(private val context: Context,
-                    private val dataSource: Array<Player>
-) : BaseAdapter() {
+                    private val dataSource: Array<Player>,
+                    val loserTV: TextView) : BaseAdapter() {
     private val inflater: LayoutInflater
         = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -70,26 +74,49 @@ class PlayerAdapter(private val context: Context,
             player.changeLifeTotal(-1)
             // update life total display
             lifeTotalTextView.text = player.lifeTotal.toString()
+            // check if player is still alive after life total change
+            checkAlive(player, loserTV)
         }
 
         plusBtn.setOnClickListener {
             player.changeLifeTotal(1)
             // update life total display
             lifeTotalTextView.text = player.lifeTotal.toString()
+            // check if player is still alive after life total change
+            checkAlive(player, loserTV)
         }
 
         minus5Btn.setOnClickListener {
             player.changeLifeTotal(-5)
             // update life total display
             lifeTotalTextView.text = player.lifeTotal.toString()
+            // check if player is still alive after life total change
+            checkAlive(player, loserTV)
         }
 
         plus5Btn.setOnClickListener {
             player.changeLifeTotal(5)
             // update life total display
             lifeTotalTextView.text = player.lifeTotal.toString()
+            // check if player is still alive after life total change
+            checkAlive(player, loserTV)
         }
 
         return rowView
+    }
+
+    // if player is no longer alive, show lose message
+    fun checkAlive(player: Player, loserTV: TextView) {
+        if (!player.lifeStatus()) {
+            // get lose message element
+            loserTV.visibility = View.VISIBLE
+            loserTV.text = context.getString(R.string.lose_msg, player.name)
+
+            // use a handler to delay hiding the lose message
+            val handler = Handler()
+            handler.postDelayed({
+                loserTV.visibility = View.INVISIBLE
+            }, 2000)
+        }
     }
 }
